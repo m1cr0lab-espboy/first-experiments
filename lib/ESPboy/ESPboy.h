@@ -12,6 +12,7 @@
 #include <Arduino.h>
 #include <Adafruit_MCP4725.h>
 #include <Adafruit_MCP23017.h>
+#include "NeoPixel.h"
 #include "tft-config.h"
 #include "espboy-logo.h"
 
@@ -46,7 +47,8 @@ class ESPboy {
 
     public:
 
-        LGFX tft;
+        LGFX     tft;
+        NeoPixel pixel;
 
         void begin(uint8_t brightness = 0xff);
         void splash();

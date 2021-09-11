@@ -108,6 +108,7 @@ void handleCollision(Paddle &paddle) {
 
                 ball.y = paddle.y + ball.RADIUS;
                 ball.vy *= -1;
+                espboy.pixel.flash(espboy.pixel.hsv(0), 50);
 
             }
 
@@ -119,6 +120,7 @@ void handleCollision(Paddle &paddle) {
 
                 ball.y = paddle.y - ball.RADIUS;
                 ball.vy *= -1;
+                espboy.pixel.flash(espboy.pixel.hsv(210), 50);
 
             }
 

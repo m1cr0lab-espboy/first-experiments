@@ -22,6 +22,9 @@ void ESPboy::_initMCP23017() {
     // TFT chip select
     _mcp.pinMode(_MCP23017_TFT_CS_PIN, OUTPUT);
     _mcp.digitalWrite(_MCP23017_TFT_CS_PIN, LOW);
+
+    // NeoPixel LED
+    pixel.begin(_mcp);
     
 }
 
@@ -38,12 +41,14 @@ void ESPboy::_initTFT() {
     tft.init();
 
     #if ESPBOY_FAST_SPI
+
         // ST7735 40MHz overclocking tradeoff:
         // vscroll init setting needs to be replayed
         tft.startWrite();
         tft.writeCommand(0x37); // vscroll command
         tft.writeData16(1);     // vscroll start address
         tft.endWrite();
+    
     #endif
 
 }
@@ -166,7 +171,7 @@ void ESPboy::splash() {
 
 uint8_t ESPboy::readButtons() {
 
-    return ~_mcp.readGPIOAB() & 255;
+    return ~(_mcp.readGPIOAB() & 0xff);
 
 }
 
@@ -180,6 +185,8 @@ void ESPboy::update() {
 
     if (_fader != _Fader::NONE) _fade();
 
+    pixel.update();
+    
     _updateFPS();
 
 }
