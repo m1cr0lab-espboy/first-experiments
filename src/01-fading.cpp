@@ -1,6 +1,6 @@
 /**
  * ----------------------------------------------------------------------------
- * Control the display backlight LED with dimming effect
+ * Controls the display backlight with dimming effect
  * ----------------------------------------------------------------------------
  */
 #include <ESPboy.h>
@@ -11,19 +11,12 @@ void setup() {
 
     espboy.begin();
 
-    LGFX_Sprite fb(&espboy.tft);
-    
-    fb.createSprite(TFT_WIDTH, TFT_HEIGHT);
-
-    fb.drawRect(0, 0, TFT_WIDTH, TFT_HEIGHT, TFT_GREEN);
-    fb.setTextColor(TFT_WHITE);
-    fb.drawCenterString(F("TFT Backlight"), 64, 40);
-    fb.setTextColor(TFT_LIGHTGRAY);
-    fb.drawString(F("ESC: fade out"), 26, 64);
-    fb.drawString(F("ACT: fade in"),  26, 80);
-    fb.pushSprite(0, 0);
-
-    fb.deleteSprite();
+    espboy.tft.drawRect(0, 0, TFT_WIDTH, TFT_HEIGHT, TFT_GREEN);
+    espboy.tft.setTextColor(TFT_WHITE);
+    espboy.tft.drawCenterString(F("TFT Backlight"), 64, 40);
+    espboy.tft.setTextColor(TFT_LIGHTGRAY);
+    espboy.tft.drawString(F("ESC: fade out"), 26, 64);
+    espboy.tft.drawString(F("ACT: fade in"),  26, 80);
 
 }
 
