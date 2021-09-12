@@ -9,30 +9,33 @@
  */
 #include "ESPboy.h"
 
-void ESPboy::_initMCP23017() {
+void ESPboy::begin(bool show_logo) {
 
-    _mcp.begin(_MCP23017_I2C_ADDR);
+    _frame_count = _fps = 0;
 
-    // Buttons
-    for (uint8_t i=0; i<8; ++i) {
-        _mcp.pinMode(i, INPUT);
-        _mcp.pullUp(i, HIGH);
-    }
+    _initTFT();
+    _initMCP23017();
 
-    // TFT chip select
-    _mcp.pinMode(_MCP23017_TFT_CS_PIN, OUTPUT);
-    _mcp.digitalWrite(_MCP23017_TFT_CS_PIN, LOW);
+    if (show_logo) {
 
-    // NeoPixel LED
-    pixel.begin(_mcp);
+        tft.setBrightness(0);
+        _drawLogo();
+        fadeIn();  while (_fading.active) _fade();
+        fadeOut(); while (_fading.active) _fade();
+        tft.fillScreen(0);
+        fadeIn();
+
+    } else tft.setBrightness(0xff);
     
 }
 
-void ESPboy::_initMCP4725(uint16_t voltage) {
+void ESPboy::update() {
+    
+    if (_fading.active) _fade();
 
-    _dac.begin(_MCP4725_I2C_ADDR);
-    _dac.setVoltage(voltage, false);
-    _fader = _Fader::NONE;
+    pixel.update();
+    
+    _updateFPS();
 
 }
 
@@ -40,7 +43,7 @@ void ESPboy::_initTFT() {
 
     tft.init();
 
-    #if ESPBOY_FAST_SPI
+    #if ESPBOY_VSCROLL_FIX
 
         // ST7735 40MHz overclocking tradeoff:
         // vscroll init setting needs to be replayed
@@ -51,6 +54,18 @@ void ESPboy::_initTFT() {
     
     #endif
 
+}
+
+void ESPboy::_initMCP23017() {
+
+    _mcp.begin_I2C();
+
+    // Buttons
+    for (uint8_t i=0; i<8; ++i) _mcp.pinMode(i, INPUT_PULLUP);
+
+    // NeoPixel LED
+    pixel.begin(_mcp);
+    
 }
 
 void ESPboy::_updateFPS() {
@@ -68,104 +83,9 @@ void ESPboy::_updateFPS() {
 
 }
 
-void ESPboy::_fade() {
+uint32_t ESPboy::fps() {
 
-    if (_fader == _Fader::FADEIN) {
-
-        if (_fading < _DAC_VOLTAGE_MAX) {
-            _dac.setVoltage(_fading += 5, false);
-        } else {
-            _dac.setVoltage(4095, false);
-            _fader = _Fader::NONE;
-        }
-
-    } else if (_fader == _Fader::FADEOUT) {
-
-        if (_fading > _DAC_VOLTAGE_MIN) {
-            _dac.setVoltage(_fading -= 5, false);
-        } else {
-            _dac.setVoltage(0, false);
-            _fader = _Fader::NONE;
-        }
-
-    }
-
-}
-
-void ESPboy::fadeIn() {
-
-    _fader  = _Fader::FADEIN;
-    _fading = _DAC_VOLTAGE_MIN;
-
-}
-
-void ESPboy::fadeOut() {
-
-    _fader  = _Fader::FADEOUT;
-    _fading = _DAC_VOLTAGE_MAX;
-
-}
-
-bool ESPboy::isFading() {
-
-    return _fader != _Fader::NONE;
-
-}
-
-void ESPboy::_drawLogo(LGFX_Sprite &logo) {
-
-    logo.pushImage(
-        0,
-        0,
-        ESPBOY_LOGO_WIDTH,
-        ESPBOY_LOGO_HEIGHT,
-        ESPBOY_LOGO
-    );
-
-    logo.pushSprite(
-        (TFT_WIDTH - ESPBOY_LOGO_WIDTH) >> 1,
-        (TFT_HEIGHT - ESPBOY_LOGO_HEIGHT) >> 1
-    );
-
-}
-
-void ESPboy::begin(uint8_t brightness) {
-
-    uint16_t dac_voltage;
-
-         if (brightness == 0)    dac_voltage = 0;
-    else if (brightness == 0xff) dac_voltage = 4095;
-    else                         dac_voltage = _DAC_VOLTAGE_MIN + brightness * (_DAC_VOLTAGE_MAX - _DAC_VOLTAGE_MIN) / 0xff;
-
-    _initMCP23017();
-    _initMCP4725(dac_voltage);
-    _initTFT();
-
-    _frame_count = _fps = 0;
-    
-}
-
-void ESPboy::splash() {
-
-    begin(0);
-
-    LGFX_Sprite logo(&tft);
-    logo.createSprite(ESPBOY_LOGO_WIDTH, ESPBOY_LOGO_HEIGHT);
-
-    fadeIn();
-    while (_fader != _Fader::NONE) { delay(5); _drawLogo(logo); update(); }
-    
-    delay(1000);
-
-    fadeOut();
-    while (_fader != _Fader::NONE) { delay(5); _drawLogo(logo); update(); }
-    
-    logo.deleteSprite();
-    tft.fillScreen(TFT_BLACK);
-
-    delay(1000);
-
-    fadeIn();
+    return _fps;
 
 }
 
@@ -175,19 +95,62 @@ uint8_t ESPboy::readButtons() {
 
 }
 
-uint32_t ESPboy::fps() {
+void ESPboy::_drawLogo() {
 
-    return _fps;
+    LGFX_Sprite logo(&tft);
+
+    logo.createSprite(ESPBOY_LOGO_WIDTH, ESPBOY_LOGO_HEIGHT);
+    
+    logo.pushImage(
+        0,
+        0,
+        ESPBOY_LOGO_WIDTH,
+        ESPBOY_LOGO_HEIGHT,
+        ESPBOY_LOGO
+    );
+
+    logo.pushSprite(
+        (TFT_WIDTH  - ESPBOY_LOGO_WIDTH) >> 1,
+        (TFT_HEIGHT - ESPBOY_LOGO_HEIGHT) >> 1
+    );
+
+    logo.deleteSprite();
 
 }
 
-void ESPboy::update() {
+bool ESPboy::fading() { return _fading.active; }
 
-    if (_fader != _Fader::NONE) _fade();
+void ESPboy::fadeIn() {
 
-    pixel.update();
-    
-    _updateFPS();
+    _fading.last_us = micros();
+    _fading.level   = _TFT_BRIGHTNESS_MIN;
+    _fading.inc     = true;
+    _fading.active  = true;
+
+}
+
+void ESPboy::fadeOut() {
+
+    _fading.last_us = micros();
+    _fading.level   = _TFT_BRIGHTNESS_MAX;
+    _fading.inc     = false;
+    _fading.active  = true;
+
+}
+
+void ESPboy::_fade() {
+
+    uint32_t now = micros();
+
+    if (now - _fading.last_us > 9999) {
+
+             if ( _fading.inc && _fading.level < _TFT_BRIGHTNESS_MAX) tft.setBrightness(++_fading.level);
+        else if (!_fading.inc && _fading.level > _TFT_BRIGHTNESS_MIN) tft.setBrightness(--_fading.level);
+        else _fading.active = false;
+
+        _fading.last_us = now;
+
+    }
 
 }
 

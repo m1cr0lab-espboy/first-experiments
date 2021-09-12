@@ -1,19 +1,29 @@
 /**
  * ----------------------------------------------------------------------------
- * Using the DAC to control the display backlight LED with dimming effect
+ * Control the display backlight LED with dimming effect
  * ----------------------------------------------------------------------------
  */
 #include <ESPboy.h>
 
 ESPboy espboy;
-LGFX_Sprite fb(&espboy.tft);
 
 void setup() {
 
-    espboy.begin(0);
-    espboy.fadeIn();
+    espboy.begin();
 
+    LGFX_Sprite fb(&espboy.tft);
+    
     fb.createSprite(TFT_WIDTH, TFT_HEIGHT);
+
+    fb.drawRect(0, 0, TFT_WIDTH, TFT_HEIGHT, TFT_GREEN);
+    fb.setTextColor(TFT_WHITE);
+    fb.drawCenterString(F("TFT Backlight"), 64, 40);
+    fb.setTextColor(TFT_LIGHTGRAY);
+    fb.drawString(F("ESC: fade out"), 26, 64);
+    fb.drawString(F("ACT: fade in"),  26, 80);
+    fb.pushSprite(0, 0);
+
+    fb.deleteSprite();
 
 }
 
@@ -22,17 +32,11 @@ void loop() {
     espboy.update();
 
     if (uint8_t read = espboy.readButtons()) {
-             if (read == 0x10) espboy.fadeIn();
-        else if (read == 0x20) espboy.fadeOut();
+
+             if (read & 0x10) espboy.fadeIn();
+        else if (read & 0x20) espboy.fadeOut();
+
     }
-
-    fb.drawRect(0, 0, TFT_WIDTH, TFT_HEIGHT, TFT_GREEN);
-    
-    fb.setTextColor(TFT_WHITE);
-    fb.drawString(F("A: fade in"),  31, 56);
-    fb.drawString(F("B: fade out"), 31, 72);
-
-    fb.pushSprite(0, 0);
 
 }
 

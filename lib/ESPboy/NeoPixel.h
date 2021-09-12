@@ -10,7 +10,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <Adafruit_MCP23017.h>
+#include <Adafruit_MCP23X17.h>
 
 class NeoPixel {
 
@@ -42,7 +42,7 @@ class NeoPixel {
 
         };
 
-        Adafruit_MCP23017 *_mcp;
+        Adafruit_MCP23X17 *_mcp;
 
         uint8_t _brightness;
 
@@ -65,7 +65,7 @@ class NeoPixel {
 
     public:
 
-        void begin(Adafruit_MCP23017 &mcp);
+        void begin(Adafruit_MCP23X17 &mcp);
         void update();
 
         void     setBrightness(uint8_t b);

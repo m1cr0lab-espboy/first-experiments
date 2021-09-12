@@ -8,24 +8,24 @@
 ESPboy espboy;
 NeoPixel *neopixel = &espboy.pixel;
 
-uint8_t brightness = 0x40;
+uint8_t brightness;
 
 void setup() {
 
-    espboy.splash();
+    espboy.begin();
 
     espboy.tft.drawCenterString(F("NeoPixel Effects"), TFT_WIDTH >> 1, 18);
 
     uint8_t y;
-    espboy.tft.setTextColor(0xad55);
-    espboy.tft.drawString(F("LEFT  Slow Flashing"), 4, y  = 42);
-    espboy.tft.drawString(F("RIGHT Fast Flashing"), 4, y += 12);
-    espboy.tft.drawString(F("UP    Breathe"),       4, y += 12);
-    espboy.tft.drawString(F("DOWN  Rainbow"),       4, y += 12);
-    espboy.tft.drawString(F("ACT   + Brightness"),  4, y += 12);
-    espboy.tft.drawString(F("ESC   - Brightness"),  4, y += 12);
+    espboy.tft.setTextColor(TFT_LIGHTGRAY);
+    espboy.tft.drawString(F("LEFT  Slow Flashing"), 8, y  = 42);
+    espboy.tft.drawString(F("RIGHT Fast Flashing"), 8, y += 12);
+    espboy.tft.drawString(F("UP    Breathe"),       8, y += 12);
+    espboy.tft.drawString(F("DOWN  Rainbow"),       8, y += 12);
+    espboy.tft.drawString(F("ACT   + Brightness"),  8, y += 12);
+    espboy.tft.drawString(F("ESC   - Brightness"),  8, y += 12);
 
-    neopixel->setBrightness(brightness);
+    neopixel->setBrightness(brightness = 0x40);
 
 }
 
@@ -33,9 +33,7 @@ void loop() {
 
     espboy.update();
 
-    uint8_t read = espboy.readButtons();
-
-    if (read) {
+    if (uint8_t read = espboy.readButtons()) {
 
         static uint16_t hue   = 0;
         static uint32_t color = 0;

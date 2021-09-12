@@ -268,12 +268,11 @@ static void mainfunc(void) {
 
 void setup(void) {
 
-    espboy.splash();
+    espboy.begin();
     espboy.tft.startWrite();
 
     for (std::uint32_t i = 0; i < 2; ++i) {
 
-        // _sprites[i].setTextSize(1);
         _sprites[i].setColorDepth(8);
 
     }

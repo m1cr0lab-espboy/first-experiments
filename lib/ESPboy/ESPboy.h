@@ -9,58 +9,54 @@
  */
 #pragma once
 
-#include <Arduino.h>
-#include <Adafruit_MCP4725.h>
-#include <Adafruit_MCP23017.h>
+#include <Adafruit_MCP23X17.h>
 #include "NeoPixel.h"
-#include "tft-config.h"
+#include "lgfx.h"
 #include "espboy-logo.h"
 
 class ESPboy {
 
     private:
 
-        enum class _Fader : uint8_t { NONE, FADEIN, FADEOUT };
+        static constexpr uint8_t _TFT_BRIGHTNESS_MIN  = 32;
+        static constexpr uint8_t _TFT_BRIGHTNESS_MAX  = 128;
 
-        static constexpr const uint8_t _MCP23017_TFT_CS_PIN = 8;
-        static constexpr const uint8_t _MCP23017_I2C_ADDR   = 0;
-        static constexpr const uint8_t _MCP4725_I2C_ADDR    = 0x60;
+        struct Fading {
 
-        static constexpr const uint16_t _DAC_VOLTAGE_MIN = 650;  // lower brightness
-        static constexpr const uint16_t _DAC_VOLTAGE_MAX = 1000; // upper brightness
+            uint32_t last_us;
+            uint8_t  level;
+            bool     inc;
+            bool     active;
 
-        Adafruit_MCP4725  _dac;
-        Adafruit_MCP23017 _mcp;
+        };
+        
+        Adafruit_MCP23X17 _mcp;
 
         uint32_t _frame_count;
         uint32_t _fps;
+        Fading   _fading;
 
-        _Fader   _fader;
-        uint16_t _fading;
-
-        void _initMCP23017();
-        void _initMCP4725(uint16_t voltage = 4095);
         void _initTFT();
+        void _initMCP23017();
         void _updateFPS();
+
+        void _drawLogo();
         void _fade();
-        void _drawLogo(LGFX_Sprite &logo);
 
     public:
 
         LGFX     tft;
         NeoPixel pixel;
 
-        void begin(uint8_t brightness = 0xff);
-        void splash();
+        void begin(bool show_logo = true);
+        void update();
 
+        uint32_t fps();
+        uint8_t  readButtons();
+
+        bool fading();
         void fadeIn();
         void fadeOut();
-        bool isFading();
-
-        uint8_t  readButtons();
-        uint32_t fps();
-
-        void update();
 
 };
 

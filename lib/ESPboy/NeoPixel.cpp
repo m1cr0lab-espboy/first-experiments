@@ -9,7 +9,7 @@
  */
 #include "NeoPixel.h"
 
-void NeoPixel::begin(Adafruit_MCP23017 &mcp) {
+void NeoPixel::begin(Adafruit_MCP23X17 &mcp) {
 
     pinMode(_LED_PIN, OUTPUT);
 

@@ -9,7 +9,6 @@ However, note that this project is experimental and therefore is likely to evolv
 At the stage where I am today, I use the following libraries to simplify the use of the various peripherals of the microcontroller:
 
 - [Adafruit MCP23017 Arduino Library][mcp23017]
-- [Adafruit_MCP4725][mcp4725]
 - [LovyanGFX][lovyangfx]
 
 I noticed that most of the developments around the ESPboy adopted Bodmer's [TFT_eSPI][tftespi] library, but I personally preferred to use the [LovyanGFX][lovyangfx] library, which provides impressive optimizations. Its author, lovyan03, has kindly agreed to [add support for ESP8266][lovyan8266] to make our life with ESPboy easier. You can thank him by starring :star: his library.
@@ -28,7 +27,6 @@ You can try out the applications without compiling them by uploading the precomp
 [espboy]:     https://www.espboy.com/
 [platformio]: https://platformio.org/
 [mcp23017]:   https://github.com/adafruit/Adafruit-MCP23017-Arduino-Library
-[mcp4725]:    https://github.com/adafruit/Adafruit_MCP4725
 [lovyangfx]:  https://github.com/lovyan03/LovyanGFX
 [tftespi]:    https://github.com/Bodmer/TFT_eSPI
 [lovyan8266]: https://github.com/lovyan03/LovyanGFX/issues/130

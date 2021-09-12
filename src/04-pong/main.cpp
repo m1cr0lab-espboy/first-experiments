@@ -160,7 +160,7 @@ void checkWalls() {
 
 void boot() {
 
-    if (!espboy.isFading()) {
+    if (!espboy.fading()) {
 
         splasher.show();
         game.state = Game::State::SPLASH;
@@ -297,11 +297,11 @@ void draw() {
 
 void setup() {
 
-    espboy.splash();
-
     fb.createSprite(TFT_WIDTH, TFT_HEIGHT);
 
     game.state = Game::State::BOOT;
+
+    espboy.begin();
     
 }
 
@@ -311,10 +311,10 @@ void setup() {
 
 void loop() {
 
-    espboy.update();
-
     update();
     draw();
+
+    espboy.update();
 
 }
 
