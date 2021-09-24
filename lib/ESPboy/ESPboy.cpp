@@ -30,6 +30,8 @@ void ESPboy::begin(bool show_logo) {
 }
 
 void ESPboy::update() {
+
+    button.read(~(_mcp.readGPIOAB() & 0xff));
     
     if (_fading.active) _fade();
 

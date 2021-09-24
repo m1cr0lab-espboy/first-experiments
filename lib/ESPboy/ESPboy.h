@@ -10,6 +10,7 @@
 #pragma once
 
 #include <Adafruit_MCP23X17.h>
+#include "Button.h"
 #include "NeoPixel.h"
 #include "lgfx.h"
 #include "espboy-logo.h"
@@ -46,6 +47,7 @@ class ESPboy {
     public:
 
         LGFX     tft;
+        Button   button;
         NeoPixel pixel;
 
         void begin(bool show_logo = true);
