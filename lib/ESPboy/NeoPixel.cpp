@@ -36,9 +36,9 @@ void NeoPixel::update() {
     
 }
 
-void NeoPixel::setBrightness(uint8_t b) { _brightness = b + 1; }
+void NeoPixel::setBrightness(const uint8_t b) { _brightness = b + 1; }
 
-uint32_t NeoPixel::rgb(uint8_t red, uint8_t green, uint8_t blue) {
+uint32_t NeoPixel::rgb(const uint8_t red, const uint8_t green, const uint8_t blue) const {
 
     return (green << 16) | (red << 8) | blue;
 
@@ -49,7 +49,7 @@ uint32_t NeoPixel::rgb(uint8_t red, uint8_t green, uint8_t blue) {
  * @param sat [0-255]
  * @param val [0-255]
  */
-uint32_t NeoPixel::hsv(uint16_t hue, uint8_t sat, uint8_t val) {
+uint32_t NeoPixel::hsv(uint16_t hue, const uint8_t sat, const uint8_t val) const {
 
     if (!sat) return rgb(val, val, val);
 
@@ -79,10 +79,10 @@ uint32_t NeoPixel::hsv(uint16_t hue, uint8_t sat, uint8_t val) {
 
 }
 
-void NeoPixel::clear() { show(0); }
+void NeoPixel::clear() const { show(0); }
 void NeoPixel::reset() { _fx = _FX::NONE; clear(); }
 
-uint8_t NeoPixel::_sine(uint8_t i) {
+uint8_t NeoPixel::_sine(const uint8_t i) const {
 
     switch (i >> 6) {
 
@@ -111,7 +111,7 @@ void NeoPixel::_flash() {
 
 }
 
-void NeoPixel::flash(uint32_t color, uint16_t duration_ms, uint8_t count, uint16_t period_ms) {
+void NeoPixel::flash(const uint32_t color, const uint16_t duration_ms, const uint8_t count, const uint16_t period_ms) {
 
     _fx             = _FX::FLASH;
     _fx_color       = color;
@@ -151,7 +151,7 @@ void NeoPixel::_breathe() {
 
 }
 
-void NeoPixel::breathe(uint32_t color, uint16_t wait_ms, uint8_t count) {
+void NeoPixel::breathe(const uint32_t color, const uint16_t wait_ms, const uint8_t count) {
 
     _fx             = _FX::BREATHE;
     _fx_offset      = 0;
@@ -177,7 +177,7 @@ void NeoPixel::_rainbow() {
     
 }
 
-void NeoPixel::rainbow(uint32_t wait_ms, uint8_t count) {
+void NeoPixel::rainbow(const uint32_t wait_ms, const uint8_t count) {
 
     _fx             = _FX::RAINBOW;
     _fx_hue         = 0;
@@ -195,7 +195,7 @@ void NeoPixel::rainbow(uint32_t wait_ms, uint8_t count) {
  * @see https://github.com/adafruit/Adafruit_NeoPixel/blob/master/esp8266.c
  * @see https://github.com/ESPboy-edu/ESPboy_Classes/blob/main/ESPboy_LED/ESPboyLED.cpp
  */
-void IRAM_ATTR NeoPixel::show(uint32_t color) {
+void IRAM_ATTR NeoPixel::show(const uint32_t color) const {
 
     static const uint32_t pin_mask = 1 << _LED_PIN;
     static uint32_t t, c, start, mask;

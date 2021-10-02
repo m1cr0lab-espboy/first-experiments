@@ -128,7 +128,7 @@ class LGFX : public lgfx::LGFX_Device {
 
         }
 
-        void cs_control(bool level) override {
+        void cs_control(const bool level) override {
 
             // MCP23017 PortB bit0 = CS (set level)
             lgfx::i2c::writeRegister8(PORT, MCP23017_ADDR, MCP23017_GPIO_B, level, 0xfe, I2C_FREQ);

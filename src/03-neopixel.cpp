@@ -6,7 +6,7 @@
 #include <ESPboy.h>
 
 ESPboy espboy;
-NeoPixel *neopixel = &espboy.pixel;
+NeoPixel * const neopixel = &espboy.pixel;
 
 uint8_t brightness;
 
@@ -33,7 +33,7 @@ void loop() {
 
     espboy.update();
 
-    if (uint8_t read = espboy.readButtons()) {
+    if (const uint8_t read = espboy.readButtons()) {
 
         static uint16_t hue   = 0;
         static uint32_t color = 0;

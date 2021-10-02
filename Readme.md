@@ -21,7 +21,7 @@ The source code is organized as a [PlatformIO][platformio] project and is theref
 
 ## Run the applications on your ESPboy
 
-You can try out the applications without compiling them by uploading the precompiled binaries to your ESPboy. To do this, you need to connect the handheld to your PC with a USB cable. Then [go to this page][binaries] with the **Chrome** browser (the only browser currently supported).
+You can try out the applications without compiling them by uploading the precompiled binaries to your ESPboy. To do this, you need to connect the handheld to your PC with a USB cable. Then [go to this page][binaries] with Google Chrome or Microsoft Edge.
 
 
 [espboy]:     https://www.espboy.com/

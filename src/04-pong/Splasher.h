@@ -10,9 +10,9 @@
 
 struct Splasher {
 
-    static constexpr const uint8_t WIDTH  = 76;
-    static constexpr const uint8_t HEIGHT = 19;
-    static constexpr const uint8_t X      = (TFT_WIDTH - WIDTH) >> 1;
+    static constexpr uint8_t WIDTH  = 76;
+    static constexpr uint8_t HEIGHT = 19;
+    static constexpr uint8_t X      = (TFT_WIDTH - WIDTH) >> 1;
 
     enum class FX : uint8_t { SHOW, HIDE };
 
@@ -42,7 +42,7 @@ struct Splasher {
 
     void exit() {
 
-        float dy = ty - y;
+        const float_t dy = ty - y;
 
         if (dy < 0) {
 
@@ -55,8 +55,8 @@ struct Splasher {
 
     void spring() {
 
-        float_t dy = ty - y;
-        float_t ay = .1f * dy;
+        const float_t dy = ty - y;
+        const float_t ay = .1f * dy;
 
         if (abs(dy) > 0.05f) {
 

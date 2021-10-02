@@ -24,7 +24,7 @@ void loop() {
 
     espboy.update();
 
-    if (uint8_t read = espboy.readButtons()) {
+    if (const uint8_t read = espboy.readButtons()) {
 
              if (read & 0x10) espboy.fadeIn();
         else if (read & 0x20) espboy.fadeOut();

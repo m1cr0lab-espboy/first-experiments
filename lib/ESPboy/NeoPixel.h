@@ -16,7 +16,7 @@ class NeoPixel {
 
     private:
 
-        static constexpr const uint8_t _FAST_SINE[] PROGMEM = {
+        static constexpr uint8_t _FAST_SINE[] PROGMEM = {
 
               0,   0,   0,   0,   1,   1,   1,   2,   2,   3,   4,   5,   6,   6,   8,   9,
              10,  11,  12,  14,  15,  17,  18,  20,  22,  23,  25,  27,  29,  31,  33,  35,
@@ -25,13 +25,13 @@ class NeoPixel {
 
         };
 
-        static constexpr const uint8_t _LED_PIN           = D4;
-        static constexpr const uint8_t _MCP23017_LOCK_PIN = 9;
+        static constexpr uint8_t _LED_PIN           = D4;
+        static constexpr uint8_t _MCP23017_LOCK_PIN = 9;
 
-        static constexpr const uint8_t CPU_FREQ       = F_CPU / 80000000L;
-        static constexpr const uint8_t CYCLES_800_T0H = CPU_FREQ * 32;
-        static constexpr const uint8_t CYCLES_800_T1H = CPU_FREQ * 64;
-        static constexpr const uint8_t CYCLES_800     = CPU_FREQ * 100;
+        static constexpr uint8_t CPU_FREQ       = F_CPU / 80000000L;
+        static constexpr uint8_t CYCLES_800_T0H = CPU_FREQ * 32;
+        static constexpr uint8_t CYCLES_800_T1H = CPU_FREQ * 64;
+        static constexpr uint8_t CYCLES_800     = CPU_FREQ * 100;
 
         enum class _FX : uint8_t {
 
@@ -61,26 +61,26 @@ class NeoPixel {
         void _breathe();
         void _rainbow();
 
-        uint8_t _sine(uint8_t i);
+        uint8_t _sine(const uint8_t i) const;
 
     public:
 
         void begin(Adafruit_MCP23X17 &mcp);
         void update();
 
-        void     setBrightness(uint8_t b);
-        uint32_t rgb(uint8_t red, uint8_t green, uint8_t blue);
-        uint32_t hsv(uint16_t hue, uint8_t sat = 0xff, uint8_t val = 0xff);
+        void     setBrightness(const uint8_t b);
+        uint32_t rgb(const uint8_t red, const uint8_t green, const uint8_t blue) const;
+        uint32_t hsv(uint16_t hue, const uint8_t sat = 0xff, const uint8_t val = 0xff) const;
 
         
-        void clear();
+        void clear() const;
         void reset();
         
-        void flash(uint32_t color, uint16_t duration_ms, uint8_t count = 1, uint16_t period_ms = 0);
-        void breathe(uint32_t color, uint16_t wait_ms = 5, uint8_t count = 1);
-        void rainbow(uint32_t wait_ms = 5, uint8_t count = 1);
+        void flash(const uint32_t color, const uint16_t duration_ms, const uint8_t count = 1, const uint16_t period_ms = 0);
+        void breathe(const uint32_t color, const uint16_t wait_ms = 5, const uint8_t count = 1);
+        void rainbow(const uint32_t wait_ms = 5, const uint8_t count = 1);
 
-        void IRAM_ATTR show(uint32_t color);
+        void IRAM_ATTR show(const uint32_t color) const;
 
 };
 

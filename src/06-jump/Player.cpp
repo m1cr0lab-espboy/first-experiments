@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(uint16_t x, uint16_t y)
+Player::Player(const uint16_t x, const uint16_t y)
 : _x(x)
 , _y(y)
 , _vx(0)
@@ -8,17 +8,17 @@ Player::Player(uint16_t x, uint16_t y)
 , _standing(true)
 {}
 
-int16_t Player::x()        { return _x;            }
-int16_t Player::y()        { return _y;            }
-int16_t Player::right()    { return _x + SIZE - 1; }
-int16_t Player::bottom()   { return _y + SIZE - 1; }
-bool    Player::standing() { return _standing;     }
+int16_t Player::x()        const { return _x;            }
+int16_t Player::y()        const { return _y;            }
+int16_t Player::right()    const { return _x + SIZE - 1; }
+int16_t Player::bottom()   const { return _y + SIZE - 1; }
+bool    Player::standing() const { return _standing;     }
 
 void Player::moveLeft()  { _vx = -SPEED;                   }
 void Player::moveRight() { _vx =  SPEED;                   }
 void Player::jump()      { _vy = -JUMP; _standing = false; }
 
-void Player::_handleHorizontalCollisions(Tilemap &tilemap) {
+void Player::_handleHorizontalCollisions(const Tilemap &tilemap) {
 
     // hit points along the y-axis
     uint16_t hpy[HIT_POINTS];
@@ -27,11 +27,11 @@ void Player::_handleHorizontalCollisions(Tilemap &tilemap) {
     hpy[HIT_POINTS - 1] = bottom();
     if (HIT_POINTS > 2) for (uint8_t i = 1; i < HIT_POINTS - 1; ++i) hpy[i] = _y + i * Tilemap::TILE_SIZE;
 
-    uint16_t tx = (_vx < 0 ? _x : right()) / Tilemap::TILE_SIZE;
+    const uint16_t tx = (_vx < 0 ? _x : right()) / Tilemap::TILE_SIZE;
 
     for (uint8_t i = 0; i < HIT_POINTS; ++i) {
 
-        uint16_t ty = hpy[i] / Tilemap::TILE_SIZE;
+        const uint16_t ty = hpy[i] / Tilemap::TILE_SIZE;
 
         if (tilemap.isSolid(tx, ty)) {
 
@@ -45,7 +45,7 @@ void Player::_handleHorizontalCollisions(Tilemap &tilemap) {
 
 }
 
-void Player::_handleVerticalCollisions(Tilemap &tilemap) {
+void Player::_handleVerticalCollisions(const Tilemap &tilemap) {
 
     // hit points along the x-axis
     uint16_t hpx[HIT_POINTS];
@@ -54,11 +54,11 @@ void Player::_handleVerticalCollisions(Tilemap &tilemap) {
     hpx[HIT_POINTS - 1] = right();
     if (HIT_POINTS > 2) for (uint8_t i = 1; i < HIT_POINTS - 1; ++i) hpx[i] = _x + i * Tilemap::TILE_SIZE;
 
-    uint16_t ty = (_vy < 0 ? _y : bottom()) / Tilemap::TILE_SIZE;
+    const uint16_t ty = (_vy < 0 ? _y : bottom()) / Tilemap::TILE_SIZE;
 
     for (uint8_t i = 0; i < HIT_POINTS; ++i) {
 
-        uint16_t tx = hpx[i] / Tilemap::TILE_SIZE;
+        const uint16_t tx = hpx[i] / Tilemap::TILE_SIZE;
 
         if (tilemap.isSolid(tx, ty)) {
 
@@ -83,7 +83,7 @@ void Player::_handleVerticalCollisions(Tilemap &tilemap) {
 
 }
 
-void Player::update(Tilemap &tilemap) {
+void Player::update(const Tilemap &tilemap) {
 
     if (_vx) {
 
@@ -98,7 +98,7 @@ void Player::update(Tilemap &tilemap) {
 
 }
 
-void Player::draw(LGFX_Sprite &fb) {
+void Player::draw(LGFX_Sprite &fb) const {
 
     fb.fillRect(_x, _y, SIZE, SIZE, 0x07e0);
 

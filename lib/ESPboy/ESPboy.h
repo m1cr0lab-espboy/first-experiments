@@ -50,13 +50,13 @@ class ESPboy {
         Button   button;
         NeoPixel pixel;
 
-        void begin(bool show_logo = true);
+        void begin(const bool show_logo = true);
         void update();
 
-        uint32_t fps();
+        uint32_t fps() const;
         uint8_t  readButtons();
 
-        bool fading();
+        bool fading() const;
         void fadeIn();
         void fadeOut();
 

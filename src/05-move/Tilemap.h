@@ -33,8 +33,8 @@ class Tilemap {
         static constexpr uint8_t WIDTH     = TFT_WIDTH  / TILE_SIZE;
         static constexpr uint8_t HEIGHT    = TFT_HEIGHT / TILE_SIZE;
 
-        bool isSolid(uint8_t x, uint8_t y);
+        bool isSolid(const uint8_t x, const uint8_t y) const;
 
-        void draw(LGFX_Sprite &fb);
+        void draw(LGFX_Sprite &fb) const;
 
 };

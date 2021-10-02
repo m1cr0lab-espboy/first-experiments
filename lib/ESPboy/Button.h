@@ -25,10 +25,10 @@ class Button {
         static constexpr uint8_t TOP_LEFT  = 6;
         static constexpr uint8_t TOP_RIGHT = 7;
 
-        void read(uint8_t input);
-        bool pressed(uint8_t button);
-        bool released(uint8_t button);
-        bool held(uint8_t button, uint32_t delay_ms = 0);
+        void read(const uint8_t input);
+        bool pressed(const uint8_t button) const;
+        bool released(const uint8_t button) const;
+        bool held(const uint8_t button, const uint32_t delay_ms = 0) const;
     
 };
 

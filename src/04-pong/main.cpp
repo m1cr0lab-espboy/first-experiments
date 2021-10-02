@@ -61,9 +61,9 @@ void waitForStart() {
 
 }
 
-void controlPlayer(bool serving = false) {
+void controlPlayer(const bool serving = false) {
 
-    uint8_t read = espboy.readButtons();
+    const uint8_t read = espboy.readButtons();
 
          if (read & 0x01) human.moveToLeft();
     else if (read & 0x08) human.moveToRight();
@@ -79,7 +79,7 @@ void controlRobot() {
 
     if (ball.vy < 0 && ball.y < (TFT_HEIGHT >> 1)) {
 
-        uint8_t epsilon = random(robot.SW2 >> 1, robot.SW2);
+        const uint8_t epsilon = random(robot.SW2 >> 1, robot.SW2);
 
              if (ball.x + epsilon < robot.x) robot.moveToLeft();
         else if (ball.x > epsilon + robot.x) robot.moveToRight();
@@ -102,7 +102,7 @@ void handleCollision(Paddle &paddle) {
 
         if (paddle.up) {
 
-            int8_t dy = ball.top() - paddle.y;
+            const int8_t dy = ball.top() - paddle.y;
 
             if (dy < 0 && dy > -paddle.H2) {
 
@@ -114,7 +114,7 @@ void handleCollision(Paddle &paddle) {
 
         } else {
 
-            int8_t dy = ball.bottom() - paddle.y;
+            const int8_t dy = ball.bottom() - paddle.y;
 
             if (dy > 0 && dy < paddle.H2) {
 

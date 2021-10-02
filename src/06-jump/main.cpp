@@ -6,7 +6,8 @@
 
 ESPboy espboy;
 LGFX_Sprite fb(&espboy.tft);
-Tilemap tilemap;
+
+const Tilemap tilemap;
 Player player(56, 104);
 
 // ----------------------------------------------------------------------------
@@ -26,7 +27,7 @@ void setup() {
 
 void input() {
 
-    uint8_t read = espboy.readButtons();
+    const uint8_t read = espboy.readButtons();
 
          if (read & 0x01) player.moveLeft();
     else if (read & 0x08) player.moveRight();

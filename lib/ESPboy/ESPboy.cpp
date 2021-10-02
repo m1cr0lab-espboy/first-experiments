@@ -9,7 +9,7 @@
  */
 #include "ESPboy.h"
 
-void ESPboy::begin(bool show_logo) {
+void ESPboy::begin(const bool show_logo) {
 
     _frame_count = _fps = 0;
 
@@ -73,7 +73,7 @@ void ESPboy::_initMCP23017() {
 void ESPboy::_updateFPS() {
 
     static uint32_t last_sec = 0;
-           uint32_t sec      = millis() / 1000;
+    const  uint32_t sec      = millis() / 1000;
 
     if (sec != last_sec) {
         _fps = _frame_count;
@@ -85,7 +85,7 @@ void ESPboy::_updateFPS() {
 
 }
 
-uint32_t ESPboy::fps() {
+uint32_t ESPboy::fps() const {
 
     return _fps;
 
@@ -120,7 +120,7 @@ void ESPboy::_drawLogo() {
 
 }
 
-bool ESPboy::fading() { return _fading.active; }
+bool ESPboy::fading() const { return _fading.active; }
 
 void ESPboy::fadeIn() {
 
@@ -142,7 +142,7 @@ void ESPboy::fadeOut() {
 
 void ESPboy::_fade() {
 
-    uint32_t now = micros();
+    const uint32_t now = micros();
 
     if (now - _fading.last_us > 9999) {
 

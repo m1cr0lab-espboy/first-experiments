@@ -10,22 +10,22 @@
 
 struct Ball {
 
-    static constexpr const uint8_t SIZE   = 6;
-    static constexpr const uint8_t RADIUS = SIZE >> 1;
-    static constexpr const uint8_t VX     = 3;
-    static constexpr const uint8_t VY     = 3;
+    static constexpr uint8_t SIZE   = 6;
+    static constexpr uint8_t RADIUS = SIZE >> 1;
+    static constexpr uint8_t VX     = 3;
+    static constexpr uint8_t VY     = 3;
 
     uint8_t x;
     uint8_t y;
     int8_t  vx;
     int8_t  vy;
 
-    Ball(uint8_t x, uint8_t y) : x(x), y(y), vx(0), vy(0) {}
+    Ball(const uint8_t x, const uint8_t y) : x(x), y(y), vx(0), vy(0) {}
 
-    inline int16_t top()    { return y - RADIUS; }
-    inline int16_t bottom() { return y + RADIUS; }
-    inline int16_t left()   { return x - RADIUS; }
-    inline int16_t right()  { return x + RADIUS; }
+    inline int16_t top()    const { return y - RADIUS; }
+    inline int16_t bottom() const { return y + RADIUS; }
+    inline int16_t left()   const { return x - RADIUS; }
+    inline int16_t right()  const { return x + RADIUS; }
 
     void toss() {
 

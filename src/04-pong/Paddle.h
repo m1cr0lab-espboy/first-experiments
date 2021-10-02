@@ -10,18 +10,18 @@
 
 struct Paddle {
 
-    static constexpr const uint8_t WIDTH       = 32;
-    static constexpr const uint8_t HEIGHT      = 8;
-    static constexpr const uint8_t MARGIN      = 4;
-    static constexpr const uint8_t PADDING     = 4;
-    static constexpr const uint8_t SOLID_WIDTH = WIDTH - (PADDING << 1);
+    static constexpr uint8_t WIDTH       = 32;
+    static constexpr uint8_t HEIGHT      = 8;
+    static constexpr uint8_t MARGIN      = 4;
+    static constexpr uint8_t PADDING     = 4;
+    static constexpr uint8_t SOLID_WIDTH = WIDTH - (PADDING << 1);
 
-    static constexpr const uint8_t W2  = WIDTH >> 1;
-    static constexpr const uint8_t H2  = HEIGHT >> 1;
-    static constexpr const uint8_t SW2 = SOLID_WIDTH >> 1;
-    static constexpr const uint8_t Y   = HEIGHT + MARGIN;
+    static constexpr uint8_t W2  = WIDTH >> 1;
+    static constexpr uint8_t H2  = HEIGHT >> 1;
+    static constexpr uint8_t SW2 = SOLID_WIDTH >> 1;
+    static constexpr uint8_t Y   = HEIGHT + MARGIN;
 
-    static constexpr const uint8_t V_MAX = 3;
+    static constexpr uint8_t V_MAX = 3;
 
     enum class Position : uint8_t { Up, Down };
 
@@ -32,18 +32,18 @@ struct Paddle {
     bool up;
     bool waiting;
 
-    Paddle(uint8_t x, Position pos)
+    Paddle(const uint8_t x, const Position pos)
     : x(x)
     , up(pos == Position::Up)
     {
         y = up ? Y : TFT_HEIGHT - 1 - Y;
     }
 
-    inline uint8_t top()         { return up ? y - HEIGHT : y; }
-    inline uint8_t left()        { return x - W2; }
-    inline uint8_t right()       { return x + W2; }
-    inline uint8_t solid_left()  { return x - SW2; }
-    inline uint8_t solid_right() { return x + SW2; }
+    inline uint8_t top()         const { return up ? y - HEIGHT : y; }
+    inline uint8_t left()        const { return x - W2; }
+    inline uint8_t right()       const { return x + W2; }
+    inline uint8_t solid_left()  const { return x - SW2; }
+    inline uint8_t solid_right() const { return x + SW2; }
 
     void moveToLeft()  {
 
@@ -59,13 +59,13 @@ struct Paddle {
     
     }
 
-    void wait(bool loop = false) {
+    void wait(const bool loop = false) {
 
         static bool flag = true;
 
         if (waiting) {
 
-            float_t dx = tx - x;
+            const float_t dx = tx - x;
 
             if (abs(dx) > 0.05f) {
 
