@@ -9,12 +9,19 @@
  */
 #pragma once
 
+#define LGFX_ESPBOY
+#define LGFX_USE_V1
+#include <LovyanGFX.hpp>
+#include <LGFX_AUTODETECT.hpp>
+
 #include <Adafruit_MCP23X17.h>
 #include <Adafruit_MCP4725.h>
 #include "Button.h"
 #include "NeoPixel.h"
-#include "lgfx.h"
 #include "espboy-logo.h"
+
+constexpr uint8_t TFT_WIDTH  = 128;
+constexpr uint8_t TFT_HEIGHT = 128;
 
 class ESPboy {
 
