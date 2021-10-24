@@ -14,18 +14,19 @@ void ESPboy::begin(const bool show_logo) {
     _frame_count = _fps = 0;
 
     _initTFT();
+    _initMCP4725();
     _initMCP23017();
 
     if (show_logo) {
 
-        tft.setBrightness(0);
+        _dac.setVoltage(0, false);
         _drawLogo();
         fadeIn();  while (_fading.active) _fade();
         fadeOut(); while (_fading.active) _fade();
         tft.fillScreen(0);
         fadeIn();
 
-    } else tft.setBrightness(0xff);
+    } else _dac.setVoltage(4095, false);
     
 }
 
@@ -55,6 +56,12 @@ void ESPboy::_initTFT() {
         tft.endWrite();
     
     #endif
+
+}
+
+void ESPboy::_initMCP4725() {
+
+    _dac.begin(0x60);
 
 }
 
@@ -125,7 +132,7 @@ bool ESPboy::fading() const { return _fading.active; }
 void ESPboy::fadeIn() {
 
     _fading.last_us = micros();
-    _fading.level   = _TFT_BRIGHTNESS_MIN;
+    _fading.level   = _DAC_MIN;
     _fading.inc     = true;
     _fading.active  = true;
 
@@ -134,7 +141,7 @@ void ESPboy::fadeIn() {
 void ESPboy::fadeOut() {
 
     _fading.last_us = micros();
-    _fading.level   = _TFT_BRIGHTNESS_MAX;
+    _fading.level   = _DAC_MAX;
     _fading.inc     = false;
     _fading.active  = true;
 
@@ -146,9 +153,24 @@ void ESPboy::_fade() {
 
     if (now - _fading.last_us > 9999) {
 
-             if ( _fading.inc && _fading.level < _TFT_BRIGHTNESS_MAX) tft.setBrightness(++_fading.level);
-        else if (!_fading.inc && _fading.level > _TFT_BRIGHTNESS_MIN) tft.setBrightness(--_fading.level);
+             if ( _fading.inc && _fading.level < _DAC_MAX) _fading.level += 5;
+        else if (!_fading.inc && _fading.level > _DAC_MIN) _fading.level -= 5;
         else _fading.active = false;
+
+        switch (_fading.level) {
+
+            case _DAC_MIN:
+                _dac.setVoltage(0, false);
+                break;
+
+            case _DAC_MAX:
+                _dac.setVoltage(4095, false);
+                break;
+            
+            default:
+                _dac.setVoltage(_fading.level, false);
+
+        }
 
         _fading.last_us = now;
 

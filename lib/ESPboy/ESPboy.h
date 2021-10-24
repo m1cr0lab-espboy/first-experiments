@@ -10,6 +10,7 @@
 #pragma once
 
 #include <Adafruit_MCP23X17.h>
+#include <Adafruit_MCP4725.h>
 #include "Button.h"
 #include "NeoPixel.h"
 #include "lgfx.h"
@@ -19,18 +20,19 @@ class ESPboy {
 
     private:
 
-        static constexpr uint8_t _TFT_BRIGHTNESS_MIN  = 32;
-        static constexpr uint8_t _TFT_BRIGHTNESS_MAX  = 128;
+        static constexpr uint16_t _DAC_MIN = 650;
+        static constexpr uint16_t _DAC_MAX = 1000;
 
         struct Fading {
 
             uint32_t last_us;
-            uint8_t  level;
+            uint16_t level;
             bool     inc;
             bool     active;
 
         };
         
+        Adafruit_MCP4725  _dac;
         Adafruit_MCP23X17 _mcp;
 
         uint32_t _frame_count;
@@ -38,6 +40,7 @@ class ESPboy {
         Fading   _fading;
 
         void _initTFT();
+        void _initMCP4725();
         void _initMCP23017();
         void _updateFPS();
 
